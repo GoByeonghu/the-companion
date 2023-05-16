@@ -3,18 +3,135 @@ package com.gobyeonghu.the_companion;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+//코드 참조:https://webnautes.tistory.com/647
 
+public class MainActivity extends AppCompatActivity
+        implements OnMapReadyCallback{
+
+    private GoogleMap mMap;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+        Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
+                .clickable(false)
+                .add(
+                        new LatLng(37.246,127.077),
+                        new LatLng(37.247,127.078),
+                        new LatLng(37.249,127.078),
+                        new LatLng(37.252,127.077),
+                        new LatLng(37.255,127.073),
+                        new LatLng(37.257,127.068)));
+        //polyline1.setTag("A");
+
+        Circle circle = googleMap.addCircle(new CircleOptions()
+                .center(new LatLng(37.246,127.077))
+                .radius(20)
+                .strokeColor(Color.RED)
+                .fillColor(Color.RED));
+        googleMap.addCircle(new CircleOptions()
+                .center(new LatLng(37.247,127.078))
+                .radius(20)
+                .strokeColor(Color.RED)
+                .fillColor(Color.RED));
+        googleMap.addCircle(new CircleOptions()
+                .center(new LatLng(37.249,127.078))
+                .radius(20)
+                .strokeColor(Color.RED)
+                .fillColor(Color.RED));
+        googleMap.addCircle(new CircleOptions()
+                .center(new LatLng(37.252,127.077))
+                .radius(20)
+                .strokeColor(Color.RED)
+                .fillColor(Color.RED));
+        googleMap.addCircle(new CircleOptions()
+                .center(new LatLng(37.255,127.073))
+                .radius(20)
+                .strokeColor(Color.RED)
+                .fillColor(Color.RED));
+        googleMap.addCircle(new CircleOptions()
+                .center(new LatLng(37.257,127.068))
+                .radius(20)
+                .strokeColor(Color.RED)
+                .fillColor(Color.RED));
+        /*
+        Polygon polygon1 = googleMap.addPolygon(new PolygonOptions()
+                .clickable(true)
+                .add(
+                        new LatLng(-27.457, 153.040),
+                        new LatLng(-33.852, 151.211),
+                        new LatLng(-37.813, 144.962),
+                        new LatLng(-34.928, 138.599)));
+
+// Store a data object with the polygon, used here to indicate an arbitrary type.
+        polygon1.setTag("alpha");
+        */
+        // Position the map's camera near Alice Springs in the center of Australia,
+        // and set the zoom factor so most of Australia shows on the screen.
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.246,127.077), 16));
+
+        // Set listeners for click events.
+        /*
+        mMap = googleMap;
+
+        LatLng SEOUL = new LatLng(37.56, 126.97);
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(SEOUL);
+        markerOptions.title("서울");
+        markerOptions.snippet("한국의 수도");
+        mMap.addMarker(markerOptions);
+
+
+        // 기존에 사용하던 다음 2줄은 문제가 있습니다.
+        // CameraUpdateFactory.zoomTo가 오동작하네요.
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
+        //mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SEOUL, 10));
+        */
+    }
+
+}
+
+
+
+////////////////////////////////////////////////////
+/*
 public class MainActivity extends AppCompatActivity {
 
     // target data
@@ -77,13 +194,13 @@ public class MainActivity extends AppCompatActivity {
 
                     //String.valueOf(latitude);
                     //String.valueOf(longitude);
-                    /*
-                    Toast.makeText(
-                            getApplicationContext(),
-                            "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
-                            Toast.LENGTH_LONG).show();
 
-                     */
+                    //Toast.makeText(
+                    //        getApplicationContext(),
+                    //        "당신의 위치 - \n위도: " + latitude + "\n경도: " + longitude,
+                    //        Toast.LENGTH_LONG).show();
+
+
                 } else {
                     // GPS 를 사용할수 없으므로
                     gps.showSettingsAlert();
@@ -201,3 +318,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+ */
