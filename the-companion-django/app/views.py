@@ -77,6 +77,7 @@ def user_detail(request, pk):
 class LoginView(APIView):
     def post(self, request):
         #아이디 및 비밀번호 확인
+        print(f'DDDDDDDDDDD::::::::::::{request.data}')
         try:
             user = User.objects.get(id=request.data['id'])
             if(user.pw != request.data['pw']):
