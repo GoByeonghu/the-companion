@@ -2,6 +2,8 @@ package com.gobyeonghu.the_companion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -24,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText editID, editPW;
     Button btnLogin, btnMoveRegister;
     boolean success = false;
+    String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     Thread th = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -65,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("HI1","1");
                 //String data = "{ \"id\" : \"006\", \"pw\" : \"1234\", \"email\" : \"7\" }";
                 JSONObject body = new JSONObject();
+                user_id=editID.getText().toString().trim();
                 body.put("id", editID.getText().toString().trim());
                 body.put("pw", editPW.getText().toString().trim());
                 String data=body.toString();
@@ -74,11 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("HI2",data);
                 //conn.connect();
 
-
-
-
                 // Post 파라미터
-
                 String params = "param=1"
                         + "&param2=2" + "sale";
 
@@ -145,34 +149,72 @@ public class LoginActivity extends AppCompatActivity {
                         */
                         JSONObject resultJson = new JSONObject(sb.toString());
                         Log.i("tag_i", "확인 jsonArray : " + resultJson.toString());
+
+                        try{
+                            File file = new File(getFilesDir(), "token.txt");
+                            FileOutputStream outFs = new FileOutputStream(file);
+                            String str = resultJson.getString("token");
+                            outFs.write(str.getBytes());
+                            outFs.close();
+                        }
+                        catch (IOException e){
+                            e.printStackTrace();}
+
+                        try{
+                            File file = new File(getFilesDir(), "id.txt");
+                            FileOutputStream outFs = new FileOutputStream(file);
+                            String str = user_id;
+                            outFs.write(str.getBytes());
+                            outFs.close();
+                        }
+                        catch (IOException e){
+                            e.printStackTrace();}
+
+                        try{
+                            File file = new File(getFilesDir(), "isLogin.txt");
+                            FileOutputStream outFs = new FileOutputStream(file);
+                            String str = "o";
+                            outFs.write(str.getBytes());
+                            outFs.close();
+                        }
+                        catch (IOException e){
+                            e.printStackTrace();}
                     }
                     else{
                         success=false;
                     }
                     // 연결 끊기
                     conn.disconnect();
+
+                    if(success == true){
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("id", "user_id");
+                        //resultIntent.putExtra("email", "johndoe@example.com");
+                        setResult(Activity.RESULT_OK, resultIntent);
+                        finish();
+                    }
                 }
 
                 //백그라운드 스레드에서는 메인화면을 변경 할 수 없음
                 // runOnUiThread(메인 스레드영역)
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        Toast.makeText(getApplicationContext(), "응답" + sb.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다." + sb.toString(), Toast.LENGTH_SHORT).show();
 
                         if(success == true){
-                            //return to Login
+                            Log.i("tag_bbbbbbb", "success~");
 
-                            //Intent intent = new Intent(getApplicationContext(),
-                            //        LoginActivity.class);
-                            //startActivity(intent);
-                            Log.i("tag_b", "success");
+                            /*
                             Intent intent = new Intent(getApplicationContext(),
-                                    MainActivity.class);
-                            startActivity(intent);
-                            //finish();
+                                    SettingActivity.class);
 
+                            startActivity(intent);
+                             */
+
+                            finish();
 
                         }
                         else{
@@ -181,6 +223,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+
 
             }catch (Exception e) {
                 Log.i("tag_e", "error :" + e);
