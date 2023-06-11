@@ -163,7 +163,8 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        Toast.makeText(getApplicationContext(), "응답" + sb.toString(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(), "응답" + sb.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "회원가입에 성공하였습니다" , Toast.LENGTH_SHORT).show();
 
                         if(success == true){
                             //return to Login
@@ -171,8 +172,7 @@ public class RegisterActivity extends AppCompatActivity {
                             //Intent intent = new Intent(getApplicationContext(),
                             //        LoginActivity.class);
                             //startActivity(intent);
-                            Toast.makeText(getApplicationContext(),
-                                    "Please Login", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(),"Please Login", Toast.LENGTH_SHORT).show();
                             finish();
 
 

@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -32,12 +33,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -46,74 +52,31 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.json.JSONObject;
+
 public class BasicActivity extends AppCompatActivity{
+    boolean success = false;
+    String result_data0="aa",result_data1="bb", result_data2="cc" ;
+    JSONObject resultJson1;
+    Button btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic);
-        //isLogin();
-        ViewPager2Adapter viewPager2Adapter
-                = new ViewPager2Adapter(getSupportFragmentManager(), getLifecycle());
-        ViewPager2 viewPager2 = findViewById(R.id.pager);
-        viewPager2.setAdapter(viewPager2Adapter);
-
-        //=== TabLayout기능 추가 부분 ============================================
-        TabLayout tabLayout = findViewById(R.id.tabLayout);
-        new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+        btnAdd = (Button) findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                String tabTitle;
-                switch (position) {
-                    case 0:
-                        tabTitle = "자동 추천";
-                        break;
-                    case 1:
-                        tabTitle = "추천 게시글";
-                        break;
-                    case 2:
-                        tabTitle = "내 게시글";
-                        break;
-                    default:
-                        tabTitle = "Tab " + (position + 1);
-                        break;
-                }
-                tab.setText(tabTitle);
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),
+                        AddActivity_googlemap.class);
+                startActivity(intent);
             }
-        }).attach();
-        /*
-        //탭화면 구성
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        ViewPager2 viewPager = findViewById(R.id.view_pager);
-
-        // ViewPager 어댑터 설정
-        MyPagerAdapter pagerAdapter = new MyPagerAdapter(this);
-        viewPager.setAdapter(pagerAdapter);
-
-        // TabLayout과 ViewPager 연결
-        new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> {
-                    String tabTitle;
-                    switch (position) {
-                        case 0:
-                            tabTitle = "자동 추천";
-                            break;
-                        case 1:
-                            tabTitle = "추천 게시글";
-                            break;
-                        case 2:
-                            tabTitle = "내 게시글";
-                            break;
-                        default:
-                            tabTitle = "Tab " + (position + 1);
-                            break;
-                    }
-                    tab.setText(tabTitle);
-                }
-        ).attach();
-
-         */
-
+        });
+        //isLogin();
+        //Intent intent = new Intent(BasicActivity.this, LoginActivity.class);
+        //startActivityForResult(intent, 1);
+        th.start();
 
     }
 
@@ -164,6 +127,130 @@ public class BasicActivity extends AppCompatActivity{
 
         return result;
     }
+
+    Thread th = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                LocalSetting temp = new LocalSetting();
+                String page = temp.URL+"data/recommend_list/auto/";
+                // URL 객체 생성
+                URL url = new URL(page);
+
+                //JSONObject body = new JSONObject();
+                //body.put("id", editID.getText().toString().trim());
+                //body.put("pw", editPW.getText().toString().trim());
+                //String data=body.toString();
+
+                // 연결 객체 생성
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+
+                // 결과값 저장 문자열
+                final StringBuilder sb = new StringBuilder();
+                // 연결되면
+                if(conn != null) {
+                    // 응답 타임아웃 설정
+                    conn.setRequestProperty("Accept", "application/json");
+                    //conn.setRequestProperty("Content-Type", "application/json");
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+                    conn.setConnectTimeout(10000);
+                    // GET 요청방식
+                    conn.setRequestMethod("POST");
+
+                    // url에 접속 성공하면 (200)
+                    if(conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                        // 결과 값 읽어오는 부분
+                        BufferedReader br = new BufferedReader(new InputStreamReader(
+                                conn.getInputStream(), "utf-8"
+                        ));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line);
+                        }
+                        // 버퍼리더 종료
+                        br.close();
+                        Log.i("GGGGG", "2");
+                        success=true;
+                        // 응답 Json 타입일 경우
+
+                        /*
+                        JSONArray jsonResponse = new JSONArray(sb.toString());
+                        Log.i("tag_i", "확인 jsonArray : " + jsonResponse);
+                        */
+                        resultJson1 = new JSONObject(sb.toString());
+                        result_data0=resultJson1.toString();
+                        Log.i("tag_i", "확인 jsonArray : " + resultJson1.toString());
+                    }
+                    else{
+                        Log.i("GGGGG", "3");
+                        success=false;
+                    }
+                    // 연결 끊기
+                    conn.disconnect();
+
+                    if(success == true){
+
+                    }
+                }
+                //백그라운드 스레드에서는 메인화면을 변경 할 수 없음
+                // runOnUiThread(메인 스레드영역)
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        //Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다." + sb.toString(), Toast.LENGTH_SHORT).show();
+
+                        if(success == true){
+                            //TODO
+                            ViewPager2Adapter viewPager2Adapter
+                                    = new ViewPager2Adapter(getSupportFragmentManager(), getLifecycle());
+
+                            //데이터 전송
+                            viewPager2Adapter.setData(result_data0,result_data1, result_data2);
+
+                            ViewPager2 viewPager2 = findViewById(R.id.pager);
+                            viewPager2.setAdapter(viewPager2Adapter);
+
+
+
+                            //=== TabLayout기능 추가 부분 ============================================
+                            TabLayout tabLayout = findViewById(R.id.tabLayout);
+                            new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+                                @Override
+                                public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                                    String tabTitle;
+                                    switch (position) {
+                                        case 0:
+                                            tabTitle = "자동 추천";
+                                            break;
+                                        case 1:
+                                            tabTitle = "추천 게시글";
+                                            break;
+                                        case 2:
+                                            tabTitle = "내 게시글";
+                                            break;
+                                        default:
+                                            tabTitle = "Tab " + (position + 1);
+                                            break;
+                                    }
+                                    tab.setText(tabTitle);
+                                }
+                            }).attach();
+
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),
+                                    "Login Faile", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }catch (Exception e) {
+                Log.i("tag_e", "error :" + e);
+                Toast.makeText(getApplicationContext(), "error" , Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
 }
 
 /*

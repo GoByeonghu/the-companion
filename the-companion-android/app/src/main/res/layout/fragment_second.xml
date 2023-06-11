@@ -6,12 +6,14 @@
     tools:context=".SecondFragment">
 
     <LinearLayout
+        android:id="@+id/post1"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="59dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/id1"
+            android:id="@+id/title1"
             android:layout_width="251dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -30,7 +32,7 @@
             android:layout_height="36dp"
             android:layout_weight="1"
             android:background="@drawable/btn"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:text="확인" />
 
         <Button
@@ -39,17 +41,19 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_weight="1"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:text="매칭" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/post2"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="59dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/id2"
+            android:id="@+id/title2"
             android:layout_width="251dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -69,7 +73,7 @@
             android:layout_height="36dp"
             android:layout_weight="1"
             android:background="@drawable/btn"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:text="확인" />
 
         <Button
@@ -78,17 +82,19 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_weight="1"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:text="매칭" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/post3"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="59dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/id3"
+            android:id="@+id/title3"
             android:layout_width="251dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -107,7 +113,7 @@
             android:layout_height="36dp"
             android:layout_weight="1"
             android:background="@drawable/btn"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:text="확인" />
 
         <Button
@@ -116,17 +122,19 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_weight="1"
-            android:textSize="10sp"
+            android:textSize="8sp"
             android:text="매칭" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/post4"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="59dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/id4"
+            android:id="@+id/title4"
             android:layout_width="251dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -137,7 +145,8 @@
             android:background="@drawable/bg_gis_result_items_count"
             android:text="bhwkd"
             android:textColor="#ffffff"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            />
 
         <Button
             android:id="@+id/btn_ok4"
@@ -145,8 +154,9 @@
             android:layout_height="36dp"
             android:layout_weight="1"
             android:background="@drawable/btn"
-            android:textSize="10sp"
-            android:text="확인" />
+            android:textSize="8sp"
+            android:text="확인"
+            />
 
         <Button
             android:id="@+id/btn_match4"
@@ -154,8 +164,9 @@
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_weight="1"
-            android:textSize="10sp"
-            android:text="매칭" />
+            android:textSize="8sp"
+            android:text="매칭"
+            />
     </LinearLayout>
 
 </LinearLayout>

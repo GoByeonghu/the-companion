@@ -82,11 +82,6 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("HI2",data);
                 //conn.connect();
 
-                // Post 파라미터
-                String params = "param=1"
-                        + "&param2=2" + "sale";
-
-
                 // 결과값 저장 문자열
                 final StringBuilder sb = new StringBuilder();
                 // 연결되면
@@ -122,13 +117,11 @@ public class LoginActivity extends AppCompatActivity {
 
                     //conn.getOutputStream().write(params.getBytes("utf-8"));
                     // url에 접속 성공하면 (200)
-                    Log.i("HI3","2");
 
                     //conn.getResponseCode();
 
                     if(conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                         // 결과 값 읽어오는 부분
-                        Log.i("HI4","2");
                         BufferedReader br = new BufferedReader(new InputStreamReader(
                                 conn.getInputStream(), "utf-8"
                         ));
@@ -139,8 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                         // 버퍼리더 종료
                         br.close();
                         success=true;
-                        Log.i("HI5", "결과 문자열 :" +sb.toString());
-                        Log.i("HI6","2");
+                        Log.i("RESPONSE", "결과 문자열 :" +sb.toString());
                         // 응답 Json 타입일 경우
 
                         /*
@@ -148,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i("tag_i", "확인 jsonArray : " + jsonResponse);
                         */
                         JSONObject resultJson = new JSONObject(sb.toString());
-                        Log.i("tag_i", "확인 jsonArray : " + resultJson.toString());
+                        Log.i("MAKE_JSON", "확인 jsonArray : " + resultJson.toString());
 
                         try{
                             File file = new File(getFilesDir(), "token.txt");
@@ -202,10 +194,11 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다." + sb.toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다." + sb.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "로그인에 성공하였습니다.",Toast.LENGTH_SHORT).show();
 
                         if(success == true){
-                            Log.i("tag_bbbbbbb", "success~");
+                            Log.i("LOGIN", "done");
 
                             /*
                             Intent intent = new Intent(getApplicationContext(),
@@ -218,8 +211,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         }
                         else{
-                            Toast.makeText(getApplicationContext(),
-                                    "Login Faile", Toast.LENGTH_SHORT).show();
+                            Log.i("LOGIN", "not");
                         }
                     }
                 });
@@ -227,8 +219,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
             }catch (Exception e) {
-                Log.i("tag_e", "error :" + e);
-                Toast.makeText(getApplicationContext(), "error" , Toast.LENGTH_SHORT).show();
+                Log.i("SEVER", "connection error :" + e);
+                Toast.makeText(getApplicationContext(), "server error" , Toast.LENGTH_SHORT).show();
             }
         }
     });

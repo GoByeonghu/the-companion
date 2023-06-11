@@ -44,6 +44,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-location:20.0.0'
 
+    // 구글 지도 검색 API
+    implementation 'com.google.android.gms:play-services-places:15.0.0'
+
     // ~ API 28
     //implementation 'com.android.support:design:27.1.0'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'

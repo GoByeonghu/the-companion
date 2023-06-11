@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -19,12 +18,30 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Thecompanion"
         android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="" />
+
+        <activity
+            android:name=".AddActivity_googlemap"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".AddActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
         <receiver
             android:name=".AlarmReceiver"
@@ -61,9 +78,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="" />
+
 
         <activity
             android:name=".RegisterActivity"
@@ -74,8 +89,8 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:launchMode="singleTask"
-            android:exported="false">
+            android:exported="true"
+            android:launchMode="singleTask">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -83,7 +98,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

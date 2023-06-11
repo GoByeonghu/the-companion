@@ -25,21 +25,82 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //코드 참조:https://webnautes.tistory.com/647
 
 public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback{
+    boolean[] stop1 ;
+    double[] lat1 ;
+    double[] lng1 ;
 
+    int num1;
+
+
+    boolean[] stopa = {true, false, false,false,false,true,false,false,false,false,false,false,false,true,
+            false,false,true,
+            false, true,
+            false,false,false,false,false,true};
+    double[] lata = {37.246, 37.247, 37.249, 37.252, 37.255, 37.257, 37.254, 37.253, 37.253,37.251, 37.249,37.248,37.245,37.240,
+            37.240,37.242,37.242,
+            37.255,37.255,
+            37.254, 37.253,37.251,37.249,37.247,37.245};
+    double[] lnga = {127.077, 127.078, 127.078, 127.077, 127.073, 127.068,127.075,127.075,127.076,127.078,127.079,127.078,127.078,127.079,
+            127.082, 127.081,127.079,
+            127.076,127.074,
+            127.077, 127.078,127.078,127.079,127.078,127.077};
+
+    int numa=stopa.length;
+
+    boolean[] stopb = {true, true};
+    double[] latb = {37.246, 37.247};
+    double[] lngb = {127.077,127.077};
+
+    int numb=stopb.length;
+
+    boolean[] stopc = {true, true};
+    double[] latc = {37.390, 37.391};
+    double[] lngc = {126.664,126.639};
+
+    int numc=stopb.length;
+
+    boolean[] stopd = {true, true};
+    double[] latd = {36.652, 36.6424666};
+    double[] lngd = {127.494,127.488931};
+
+    int numd=stopd.length;
+
+
+    TextView titleV, made_byV, textV;
+    String rej_data,rej_num, title, made_by, text;
     private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        rej_num = getIntent().getStringExtra("rej_num");
+        rej_data = getIntent().getStringExtra("rej_data");
+        title = getIntent().getStringExtra("title");
+        made_by = getIntent().getStringExtra("made_by");
+        text = getIntent().getStringExtra("text");
+
+        titleV=(TextView) findViewById(R.id.title);
+        made_byV=(TextView) findViewById(R.id.made_by);
+        textV=(TextView) findViewById(R.id.text);
+
+        titleV.setText(title);
+        made_byV.setText(made_by);
+        textV.setText(text);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -48,6 +109,88 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
+
+
+        if(rej_data.charAt(0)=='a'){
+            num1=numa;
+            lat1=lata;
+            lng1=lnga;
+            stop1=stopa;
+
+        }
+        else if(rej_data.charAt(0)=='b'){
+            num1=numb;
+            lat1=latb;
+            lng1=lngb;
+            stop1=stopb;
+
+        }
+        else if(rej_data.charAt(0)=='c'){
+            num1=numc;
+            lat1=latc;
+            lng1=lngc;
+            stop1=stopc;
+
+        }
+        else if(rej_data.charAt(0)=='d'){
+            num1=numd;
+            lat1=latd;
+            lng1=lngd;
+            stop1=stopd;
+
+        }
+
+
+            List<LatLng> coordinates = new ArrayList<>();
+            for(int i=0; i<num1; i++){
+                coordinates.add(new LatLng(lat1[i], lng1[i]));
+            }
+            PolylineOptions polylineOptions = new PolylineOptions().clickable(false);
+            for (LatLng latLng : coordinates) {
+                polylineOptions.add(latLng);
+            }
+            Polyline polyline1 = googleMap.addPolyline(polylineOptions);
+
+            Circle circle;
+            if(stop1[0]==true){
+                circle = googleMap.addCircle(new CircleOptions()
+                        .center(new LatLng(lat1[0], lng1[0]))
+                        .radius(20)
+                        .strokeColor(Color.RED)
+                        .fillColor(Color.RED));
+            }
+            else if(stop1[0]==false){
+                circle = googleMap.addCircle(new CircleOptions()
+                        .center(new LatLng(lat1[0], lng1[0]))
+                        .radius(12)
+                        .strokeColor(Color.BLACK)
+                        .fillColor(Color.BLACK));
+            }
+            for(int i=1; i<num1; i++){
+                if(stop1[i]==true){
+                    googleMap.addCircle(new CircleOptions()
+                            .center(new LatLng(lat1[i], lng1[i]))
+                            .radius(20)
+                            .strokeColor(Color.RED)
+                            .fillColor(Color.RED));
+                }
+                else if(stop1[i]==false){
+                    googleMap.addCircle(new CircleOptions()
+                            .center(new LatLng(lat1[i], lng1[i]))
+                            .radius(12)
+                            .strokeColor(Color.BLACK)
+                            .fillColor(Color.BLACK));
+                }
+            }
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat1[0], lng1[0]), 16));
+
+
+
+
+
+
+        /*
         Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
                 .clickable(false)
                 .add(
@@ -57,38 +200,50 @@ public class MainActivity extends AppCompatActivity
                         new LatLng(37.252,127.077),
                         new LatLng(37.255,127.073),
                         new LatLng(37.257,127.068)));
-        //polyline1.setTag("A");
 
         Circle circle = googleMap.addCircle(new CircleOptions()
                 .center(new LatLng(37.246,127.077))
                 .radius(20)
                 .strokeColor(Color.RED)
                 .fillColor(Color.RED));
+
         googleMap.addCircle(new CircleOptions()
                 .center(new LatLng(37.247,127.078))
                 .radius(20)
                 .strokeColor(Color.RED)
                 .fillColor(Color.RED));
+
         googleMap.addCircle(new CircleOptions()
                 .center(new LatLng(37.249,127.078))
                 .radius(20)
                 .strokeColor(Color.RED)
                 .fillColor(Color.RED));
+
         googleMap.addCircle(new CircleOptions()
                 .center(new LatLng(37.252,127.077))
                 .radius(20)
                 .strokeColor(Color.RED)
                 .fillColor(Color.RED));
+
         googleMap.addCircle(new CircleOptions()
                 .center(new LatLng(37.255,127.073))
                 .radius(20)
                 .strokeColor(Color.RED)
                 .fillColor(Color.RED));
+
         googleMap.addCircle(new CircleOptions()
                 .center(new LatLng(37.257,127.068))
                 .radius(20)
                 .strokeColor(Color.RED)
                 .fillColor(Color.RED));
+
+         */
+
+
+
+
+
+
         /*
         Polygon polygon1 = googleMap.addPolygon(new PolygonOptions()
                 .clickable(true)
@@ -103,7 +258,7 @@ public class MainActivity extends AppCompatActivity
         */
         // Position the map's camera near Alice Springs in the center of Australia,
         // and set the zoom factor so most of Australia shows on the screen.
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.246,127.077), 16));
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.246,127.077), 16));
 
         // Set listeners for click events.
         /*
